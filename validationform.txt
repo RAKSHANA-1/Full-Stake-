@@ -1,0 +1,117 @@
+function ValidationForm() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
+
+  const [errors, setErrors] = useState({});
+
+  // Handle input change
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    // Validate each field as user types
+    validateField(name, value);
+  };
+
+  // Validation logic
+  const validateField = (name, value) => {
+    let newErrors = { ...errors };
+
+    switch (name) {
+      case 'name':
+        newErrors.name = value.trim() === '' ? 'Name is required' : '';
+        break;
+      case 'email':
+        newErrors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+          ? ''
+          : 'Email is invalid';
+        break;
+      case 'password':
+        newErrors.password = value.length < 6
+          ? 'Password must be at least 6 characters'
+          : '';
+        break;
+      default:
+        break;
+    }
+
+    setErrors(newErrors);
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Validate all fields before submitting
+    Object.keys(formData).forEach((field) => validateField(field, formData[field]));
+
+    // Check for any errors
+    const hasErrors = Object.values(errors).some((err) => err !== '');
+    if (!hasErrors) {
+      alert('Form submitted successfully!');
+      console.log(formData);
+      // Clear form
+      setFormData({ name: '', email: '', password: '' });
+      setErrors({});
+    } else {
+      alert('Please fix the errors before submitting.');
+    }
+  };
+
+  return (
+    <div style={{ maxWidth: '400px', margin: 'auto' }}>
+      <h2>Validation Form</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+          />
+          {errors.name && <p style={{ color: 'red' }}>{errors.name}</p>}
+        </div>
+
+        <div>
+          <label>Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+          {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+        </div>
+
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+          {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
+        </div>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
+}
+
+export default ValidationForm;
+
+import ValidationForm from "./Fullstackproject/ValidationForm";
+
+function App() {
+  return (
+      <ValidationForm />
+  );
+}
+
+export default App;
