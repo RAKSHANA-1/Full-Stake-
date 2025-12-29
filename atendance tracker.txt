@@ -1,0 +1,72 @@
+// App.jsx
+import React, { useState } from 'react';
+
+function App() {
+  // Sample list of students
+  const [students, setStudents] = useState([
+    { id: 1, name: 'Alice', status: '' },
+    { id: 2, name: 'Bob', status: '' },
+    { id: 3, name: 'Charlie', status: '' },
+    { id: 4, name: 'Diana', status: '' },
+  ]);
+
+  // Function to mark student as present or absent
+  const markAttendance = (id, status) => {
+    const updatedStudents = students.map((student) =>
+      student.id === id ? { ...student, status } : student
+    );
+    setStudents(updatedStudents);
+  };
+
+  // Function to count totals
+  const getTotals = () => {
+    const present = students.filter((s) => s.status === 'Present').length;
+    const absent = students.filter((s) => s.status === 'Absent').length;
+    return { present, absent };
+  };
+
+  const totals = getTotals();
+
+  return (
+    <div style={{ padding: '50px', fontFamily: 'Arial, sans-serif', maxWidth: '600px', margin: 'auto' }}>
+      <h1>Attendance Tracker</h1>
+      <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
+        <thead>
+          <tr>
+            <th style={{ border: '1px solid #ccc', padding: '8px' }}>Student</th>
+            <th style={{ border: '1px solid #ccc', padding: '8px' }}>Status</th>
+            <th style={{ border: '1px solid #ccc', padding: '8px' }}>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {students.map((student) => (
+            <tr key={student.id}>
+              <td style={{ border: '1px solid #ccc', padding: '8px' }}>{student.name}</td>
+              <td style={{ border: '1px solid #ccc', padding: '8px' }}>{student.status || 'Not marked'}</td>
+              <td style={{ border: '1px solid #ccc', padding: '8px' }}>
+                <button
+                  style={{ marginRight: '10px', padding: '5px 10px', backgroundColor: '#4CAF50', color: 'white', border: 'none', cursor: 'pointer' }}
+                  onClick={() => markAttendance(student.id, 'Present')}
+                >
+                  Present
+                </button>
+                <button
+                  style={{ padding: '5px 10px', backgroundColor: '#f44336', color: 'white', border: 'none', cursor: 'pointer' }}
+                  onClick={() => markAttendance(student.id, 'Absent')}
+                >
+                  Absent
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div style={{ marginTop: '20px' }}>
+        <strong>Total Present:</strong> {totals.present} | <strong>Total Absent:</strong> {totals.absent}
+      </div>
+    </div>
+  );
+}
+
+export default App;

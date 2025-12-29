@@ -1,0 +1,145 @@
+import React, { useState } from "react";
+
+function CustomDialogForm() {
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Open the dialog box on submit
+    setDialogOpen(true);
+  };
+
+  const handleConfirm = () => {
+    alert("Form submitted successfully!");
+    setDialogOpen(false);
+    setFormData({ name: "", email: "", message: "" });
+  };
+
+  const handleCancel = () => {
+    alert("Submission cancelled");
+    setDialogOpen(false);
+  };
+
+  // Inline CSS
+  const containerStyle = {
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    background: "#f0f2f5",
+  };
+
+  const cardStyle = {
+    background: "white",
+    padding: "30px",
+    borderRadius: "10px",
+    width: "400px",
+    boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
+    textAlign: "center",
+  };
+
+  const inputStyle = {
+    width: "100%",
+    padding: "10px",
+    margin: "10px 0",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+  };
+
+  const btnStyle = (color) => ({
+    padding: "10px 15px",
+    margin: "10px 5px",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    color: "white",
+    backgroundColor: color,
+  });
+
+  const dialogStyle = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    background: "rgba(0,0,0,0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+
+  const dialogContentStyle = {
+    background: "white",
+    padding: "25px",
+    borderRadius: "8px",
+    width: "350px",
+    textAlign: "center",
+    boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+  };
+
+  return (
+    <div style={containerStyle}>
+      <div style={cardStyle}>
+        <h2>Contact Us</h2>
+        <form onSubmit={handleSubmit}>
+          <input
+            style={inputStyle}
+            type="text"
+            name="name"
+            placeholder="Enter your name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <input
+            style={inputStyle}
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <textarea
+            style={inputStyle}
+            name="message"
+            placeholder="Enter your message"
+            value={formData.message}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit" style={btnStyle("#4caf50")}>
+            Submit
+          </button>
+        </form>
+      </div>
+
+      {/* Custom Dialog Box */}
+      {dialogOpen && (
+        <div style={dialogStyle}>
+          <div style={dialogContentStyle}>
+            <h3>Confirm Submission</h3>
+            <p><b>Name:</b> {formData.name}</p>
+            <p><b>Email:</b> {formData.email}</p>
+            <p><b>Message:</b> {formData.message}</p>
+            <div>
+              <button style={btnStyle("#4caf50")} onClick={handleConfirm}>
+                OK
+              </button>
+              <button style={btnStyle("#f44336")} onClick={handleCancel}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default CustomDialogForm;

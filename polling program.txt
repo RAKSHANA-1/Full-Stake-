@@ -1,0 +1,71 @@
+APP.JSX
+
+import Polling from "./Fullstackproject/polling";
+
+function App() {
+  return <Polling />;
+}
+
+export default App;
+
+import React, { useState } from "react";
+
+const Polling = () => {
+  const question = "Which programming language do you like most?";
+
+  const [options, setOptions] = useState([
+    { id: 1, text: "JavaScript", votes: 0 },
+    { id: 2, text: "Python", votes: 0 },
+    { id: 3, text: "Java", votes: 0 },
+    { id: 4, text: "C++", votes: 0 },
+  ]);
+
+  const [hasVoted, setHasVoted] = useState(false);
+
+  const handleVote = (id) => {
+    if (hasVoted) return;
+
+    const updatedOptions = options.map((option) =>
+      option.id === id
+        ? { ...option, votes: option.votes + 1 }
+        : option
+    );
+
+    setOptions(updatedOptions);
+    setHasVoted(true);
+  };
+
+  const totalVotes = options.reduce((sum, opt) => sum + opt.votes, 0);
+
+  return (
+    <div style={{ maxWidth: "400px", margin: "20px auto" }}>
+      <h2>{question}</h2>
+
+      {options.map((option) => (
+        <div key={option.id} style={{ marginBottom: "10px" }}>
+          <button
+            onClick={() => handleVote(option.id)}
+            disabled={hasVoted}
+            style={{ width: "100%" }}
+          >
+            {option.text}
+          </button>
+
+          {hasVoted && (
+            <div>
+              Votes: {option.votes} (
+              {totalVotes === 0
+                ? 0
+                : ((option.votes / totalVotes) * 100).toFixed(1)}
+              %)
+            </div>
+          )}
+        </div>
+      ))}
+
+      {hasVoted && <p>Total Votes: {totalVotes}</p>}
+    </div>
+  );
+};
+
+export default Polling;
